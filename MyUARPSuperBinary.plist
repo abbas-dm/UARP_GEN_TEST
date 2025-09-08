@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>SuperBinary Format Version</key>
+    <integer>2</integer>
+
+    <key>SuperBinary Firmware Version</key>
+    <string>1.0.0</string> <!-- Change this to your firmware version -->
+
+    <key>SuperBinary Payloads</key>
+    <array>
+        <dict>
+            <key>Payload 4CC</key>
+            <string>TS01</string> <!-- 4-character payload identifier (ASCII) -->
+
+            <key>Payload Filepath</key>
+            <string>my_firmware.bin</string> <!-- Name of your firmware file -->
+
+            <key>Payload Version</key>
+            <string>1.1.0</string> <!-- Same or different from firmware version -->
+
+            <key>Payload Long Name</key>
+            <string>TestFirmware</string> <!-- Optional human-readable name -->
+
+            <!-- Optional fields if needed -->
+            <!-- <key>Payload Description</key> -->
+            <!-- <string>This is my test firmware</string> -->
+
+            <!-- <key>Payload Encoding</key> -->
+            <!-- <string>None</string> --> <!-- Or use "zlib", "lzma", etc. if needed -->
+        </dict>
+    </array>
+</dict>
+</plist>
