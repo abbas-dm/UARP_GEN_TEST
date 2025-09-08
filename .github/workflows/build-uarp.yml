@@ -1,0 +1,35 @@
+name: Build UARP
+
+on:
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
+
+jobs:
+  build-uarp:
+    runs-on: macos-latest  # macOS runner
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make mfigr2 executable
+        run: chmod +x ./mfigr2
+
+      - name: Generate metadata plist
+        run: ./mfigr2 superbinary generate mfiMetaData=UARPMFiMetaDataTable.plist
+
+      # - name: Generate SuperBinary plist
+      #   run: ./mfigr2 superbinary generate mfiPlist=MyUARPSuperBinary.plist
+
+      - name: Compose .uarp file
+        run: |
+          ./mfigr2 superbinary compose \
+            metaDataFilepath=UARPMFiMetaDataTable.plist \
+            plistFilepath=MyUARPSuperBinary.plist \
+            payloadsFilepath=my_firmware.bin \
+            superBinaryFilepath=output.uarp
+
+      - name: Upload .uarp as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: uarp-file
+          path: output.uarp
