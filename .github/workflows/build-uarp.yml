@@ -1,11 +1,48 @@
+# name: Build UARP
+
+# on:
+#   workflow_dispatch:  # Allows manual trigger from GitHub UI
+
+# jobs:
+#   build-uarp:
+#     runs-on: macos-latest  # macOS runner
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Make mfigr2 executable
+#         run: chmod +x ./mfigr2
+
+#       - name: Generate metadata plist
+#         run: ./mfigr2 superbinary generate mfiMetaData=UARPMFiMetaDataTable.plist
+
+#       # - name: Generate SuperBinary plist
+#       #   run: ./mfigr2 superbinary generate mfiPlist=MyUARPSuperBinary.plist
+
+#       - name: Compose .uarp file
+#         run: |
+#           ./mfigr2 superbinary compose \
+#             metaDataFilepath=UARPMFiMetaDataTable.plist \
+#             plistFilepath=MyUARPSuperBinary.plist \
+#             payloadsFilepath=my_firmware.bin \
+#             superBinaryFilepath=output.uarp
+
+#       - name: Upload .uarp as artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: uarp-file
+#           path: output.uarp
+
+
 name: Build UARP
 
 on:
-  workflow_dispatch:  # Allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build-uarp:
-    runs-on: macos-latest  # macOS runner
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
@@ -28,8 +65,18 @@ jobs:
             payloadsFilepath=my_firmware.bin \
             superBinaryFilepath=output.uarp
 
-      - name: Upload .uarp as artifact
+      - name: Generate hash for .uarp using mfigr2
+        run: ./mfigr2 superbinary hash superBinaryFilepath=output.uarp > output.uarp.hash.txt
+
+      - name: Generate hash for releasenote.zip using mfigr2
+        run: ./mfigr2 superbinary hash superBinaryFilepath=releasenote.zip > releasenote.zip.hash.txt
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: uarp-file
-          path: output.uarp
+          name: uarp-hash-artifacts
+          path: |
+            output.uarp
+            output.uarp.hash.txt
+            releasenote.zip
+            releasenote.zip.hash.txt
